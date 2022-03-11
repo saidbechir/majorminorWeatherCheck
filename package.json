@@ -1,0 +1,19 @@
+{
+  "name": "majorminorweathercheck",
+  "version": "1.0.0",
+  "description": "API for wheather, mainly to know if the wheather on a particular city is graeter or lower than a given value",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saidbechir/majorminorWeatherCheck.git"
+  },
+  "author": "saidbechir",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/saidbechir/majorminorWeatherCheck/issues"
+  },
+  "homepage": "https://github.com/saidbechir/majorminorWeatherCheck#readme"
+}
