@@ -29,7 +29,7 @@ const start = async () => {
   try {
     fastify.register(fastifyEnv, envOptions);
     await fastify.listen(3000);
-    console.log("Escuchando el puerto 3000");
+    console.log("Listening on PORT 3000");
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);
