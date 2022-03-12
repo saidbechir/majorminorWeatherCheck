@@ -5,7 +5,29 @@ const defaultValues = {
   value: 15,
 };
 
-const isGreater = async (query) => {
+const getCachedValue = (cache, lat, lon) => {
+  if (cache) {
+    const cachedValue = cache.get(`${lat}${lon}`);
+    return cachedValue;
+  }
+  return null;
+};
+
+const registerCachedValue = (cache, lat, lon, value) => {
+  if (cache) {
+    cache.set(`${lat}${lon}`, value);
+  }
+};
+
+const compare = (mode, value, data) => {
+  if (!mode || mode === "greater") {
+    return parseFloat(data) > parseFloat(value || defaultValues.value);
+  } else {
+    return parseFloat(data) < parseFloat(value || defaultValues.value);
+  }
+};
+
+const isGreater = async (query, cache) => {
   const { value, mode } = query;
 
   if (mode && mode !== "greater" && mode !== "lower") {
@@ -22,6 +44,12 @@ const isGreater = async (query) => {
 
   if (!lon) {
     lon = process.env.DEFAULT_LON;
+  }
+
+  const cachedValue = getCachedValue(cache, lat, lon);
+
+  if (cachedValue) {
+    return compare(mode, value, cachedValue);
   }
 
   let queryString = "?";
@@ -43,17 +71,8 @@ const isGreater = async (query) => {
     );
   }
 
-  if (!mode || mode === "greater") {
-    return (
-      parseFloat(result.data.current.temp) >
-      parseFloat(value || defaultValues.value)
-    );
-  } else {
-    return (
-      parseFloat(result.data.current.temp) <
-      parseFloat(value || defaultValues.value)
-    );
-  }
+  registerCachedValue(cache, lat, lon, result.data.current.temp);
+  return compare(mode, value, result.data.current.temp);
 };
 
 module.exports = { isGreater };
