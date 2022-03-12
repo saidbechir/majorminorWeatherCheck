@@ -66,7 +66,9 @@ describe("GreaterLower than tests", () => {
 
   it("should perform the call using lat and lon provided by query returning is greater than default 15 value", async () => {
     mockGet.mockImplementation(() => ({ data: { current: { temp: 16 } } }));
-    expect(await service.isGreater({ lat: '-55.24', lon: '-24.22' })).toBe(true);
+    expect(await service.isGreater({ lat: "-55.24", lon: "-24.22" })).toBe(
+      true
+    );
     expect(mockGet).toHaveBeenCalledTimes(1);
     expect(mockGet).toHaveBeenCalledWith(
       `${apiUrl}?lat=-55.24&lon=-24.22&units=metric&appid=${process.env.OPEN_WHEATHER_MAP_API_KEY}`
@@ -75,7 +77,9 @@ describe("GreaterLower than tests", () => {
 
   it("should perform the call using lat and lon provided by query returning is lower than default 15 value", async () => {
     mockGet.mockImplementation(() => ({ data: { current: { temp: 1 } } }));
-    expect(await service.isGreater({ lat: '-55.24', lon: '-24.22' })).toBe(false);
+    expect(await service.isGreater({ lat: "-55.24", lon: "-24.22" })).toBe(
+      false
+    );
     expect(mockGet).toHaveBeenCalledTimes(1);
     expect(mockGet).toHaveBeenCalledWith(
       `${apiUrl}?lat=-55.24&lon=-24.22&units=metric&appid=${process.env.OPEN_WHEATHER_MAP_API_KEY}`
@@ -84,7 +88,9 @@ describe("GreaterLower than tests", () => {
 
   it("should perform the call using lat, lon and mode", async () => {
     mockGet.mockImplementation(() => ({ data: { current: { temp: 35 } } }));
-    expect(await service.isGreater({ lat: '-55.24', lon: '-24.22', mode: 'lower' })).toBe(false);
+    expect(
+      await service.isGreater({ lat: "-55.24", lon: "-24.22", mode: "lower" })
+    ).toBe(false);
     expect(mockGet).toHaveBeenCalledTimes(1);
     expect(mockGet).toHaveBeenCalledWith(
       `${apiUrl}?lat=-55.24&lon=-24.22&units=metric&appid=${process.env.OPEN_WHEATHER_MAP_API_KEY}`
@@ -93,10 +99,26 @@ describe("GreaterLower than tests", () => {
 
   it("should perform the call using lat, lon, mode and value to check", async () => {
     mockGet.mockImplementation(() => ({ data: { current: { temp: 35 } } }));
-    expect(await service.isGreater({ lat: '-55.24', lon: '-24.22', mode: 'greater', value: 20 })).toBe(true);
+    expect(
+      await service.isGreater({
+        lat: "-55.24",
+        lon: "-24.22",
+        mode: "greater",
+        value: 20,
+      })
+    ).toBe(true);
     expect(mockGet).toHaveBeenCalledTimes(1);
     expect(mockGet).toHaveBeenCalledWith(
       `${apiUrl}?lat=-55.24&lon=-24.22&units=metric&appid=${process.env.OPEN_WHEATHER_MAP_API_KEY}`
+    );
+  });
+
+  it("should throw an error when api call fails", async () => {
+    mockGet.mockImplementation(() => {
+      throw new Error();
+    });
+    await expect(service.isGreater({})).rejects.toThrow(
+      new Error("Error getting data from wheather service")
     );
   });
 });
