@@ -14,7 +14,7 @@ const isGreater = async (query) => {
     );
   }
 
-  let { lat, lon } = { query };
+  let { lat, lon } = query;
 
   if (!lat) {
     lat = process.env.DEFAULT_LAT;
