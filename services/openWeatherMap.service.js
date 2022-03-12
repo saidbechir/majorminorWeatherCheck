@@ -30,7 +30,12 @@ const isGreater = async (query) => {
   queryString = `${queryString}units=metric&`;
   queryString = `${queryString}appid=${process.env.OPEN_WHEATHER_MAP_API_KEY}`;
 
-  const result = await axios.get(`${apiUrl}${queryString}`);
+  let result;
+  try {
+    result = await axios.get(`${apiUrl}${queryString}`);
+  } catch (err) {
+    throw new Error("Error getting data from wheather service");
+  }
 
   if (!result?.data?.current?.temp) {
     throw new Error(
