@@ -1,9 +1,12 @@
 const fastify = require("fastify")({ logger: true });
 const fastifyEnv = require("fastify-env");
 
+const { isGreater } = require("./services/openWeatherMap.service");
+
 fastify.get("/", async (request, reply) => {
-    return { hello: "world" };
-  });
+  const result = await isGreater(request.query);
+  reply.status(200).send(result);
+});
 
 const envSchema = {
     type: 'object',
